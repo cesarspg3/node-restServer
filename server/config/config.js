@@ -11,12 +11,12 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ===================
 // Vencimiento del token
 // ===================
-process.env.EXPIRATION =  60 * 60 * 24 * 30;
+process.env.EXPIRATION =  process.env.EXPIRATION || 1000 * 60 * 60;
 
 // ===================
 // SEED de autenticación
 // ===================
-process.env.SEED = process.env.SEED || 60 * 60 * 24 * 30;
+process.env.SEED = process.env.SEED || 'este-es-es-seed-desarrollo';
 
 // ===================
 // BD

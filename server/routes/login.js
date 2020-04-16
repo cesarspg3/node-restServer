@@ -9,7 +9,7 @@ const app = express();
 app.post('/login', (req, res) => {
 
     const body = req.body;
-    const { email, password } = body
+    const { email, password } = body;   
 
     if ( !email || !password ) return res.status(400).json({ ok: false, err: 'No se ha recibido usuario o contraseña' }) 
 
@@ -27,7 +27,7 @@ app.post('/login', (req, res) => {
 
         const token = jwt.sign({
             usuario: usuarioDB
-        }, 'este-es-es-seed-desarrollo', { expiresIn: 60 * 60 * 24 * 30 })
+        }, process.env.SEED, { expiresIn: process.env.EXPIRATION })
 
         res.json({
             ok: true,

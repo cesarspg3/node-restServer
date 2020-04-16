@@ -2,10 +2,14 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore')
 const User = require('./../models/user');
+const { checkToken, checkUserAdmin } = require('./../middlewares/auth')
 
 const app = express();
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', checkToken, (req, res) => {
+
+    console.log('get usuario');
+    console.log(req.userToken);//usuario sacado del token el cual crea la petición
     
     const since = Number(req.query.desde) || 0;
     const limit = Number(req.query.limite) || 5;
@@ -28,7 +32,10 @@ app.get('/usuario', function (req, res) {
 
 })
   
-app.post('/usuario', function (req, res) {
+app.post('/usuario', checkToken, (req, res) => {
+
+    console.log('post usuario');
+    console.log(req.userToken);
 
     const body = req.body;
     const user = new User({
@@ -51,7 +58,11 @@ app.post('/usuario', function (req, res) {
 
 })
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [checkToken, checkUserAdmin], (req, res) => {
+    
+    console.log('put usuario');
+    console.log(req.userToken);
+
     const id = req.params.id;
     const body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);//solo se modificarán esos campos independiente de lo que nos manden
 
@@ -68,7 +79,11 @@ app.put('/usuario/:id', function (req, res) {
 
 })
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', checkToken, (req, res) => {
+
+    console.log('delete usuario');
+    console.log(req.userToken);
+
     const id = req.params.id;
     const body = {estado: false};
     User.findByIdAndUpdate( id, body, { new: true }, (err, disabledUser) => {
