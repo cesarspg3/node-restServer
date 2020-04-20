@@ -22,6 +22,27 @@ const checkToken = (req, res, next) => {
 }
 
 // ===================
+// Verificar Token img
+// ===================
+const checkImgToken = (req, res, next) => {
+    
+    if (!req.query.token) return res.status(400).json({ ok: false, err: 'token no recibido' });
+    const token = req.query.token;
+
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+        
+        if (err) {
+            return res.status(401).json({ ok: false, err: 'token no válido' });
+        }
+
+        req.userToken = decoded.usuario;
+        next();
+
+    })
+
+}
+
+// ===================
 // Verificar userAdmin
 // ===================
 const checkUserAdmin = (req, res, next) => {
@@ -46,4 +67,4 @@ const checkUserAdmin = (req, res, next) => {
 
 }
 
-module.exports = { checkToken, checkUserAdmin }
+module.exports = { checkToken, checkUserAdmin, checkImgToken }
